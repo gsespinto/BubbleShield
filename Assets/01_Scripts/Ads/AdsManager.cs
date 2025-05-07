@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Unity.Services.LevelPlay;
 using Unity.Services.Authentication;
+using Unity.Services.Core;
 
 public class AdsManager : MonoBehaviour
 {
@@ -75,7 +76,9 @@ public class AdsManager : MonoBehaviour
         LevelPlay.OnInitSuccess += SdkInitializationCompletedEvent;
         LevelPlay.OnInitFailed += SdkInitializationFailedEvent;
 
-        string userId = AuthenticationService.Instance != null ? AuthenticationService.Instance.PlayerId : "";
+        string userId = UnityServices.Instance != null && AuthenticationService.Instance != null ? 
+            AuthenticationService.Instance.PlayerId : "";
+        
         LevelPlay.Init(appKey, userId, legacyAdFormats);
     }
 
