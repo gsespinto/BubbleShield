@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.google.external-dependency-manager": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm",
     "com.unity.adaptiveperformance.google.android": "5.1.4",
     "com.unity.adaptiveperformance.samsung.android": "5.0.0",
     "com.unity.collab-proxy": "2.8.1",
@@ -10,6 +11,8 @@
     "com.unity.inputsystem": "1.14.0",
     "com.unity.multiplayer.center": "1.0.0",
     "com.unity.render-pipelines.universal": "17.0.4",
+    "com.unity.services.authentication": "3.4.1",
+    "com.unity.services.levelplay": "8.8.1",
     "com.unity.timeline": "1.8.7",
     "com.unity.toolchain.linux-x86_64": "2.0.10",
     "com.unity.ugui": "2.0.0",
