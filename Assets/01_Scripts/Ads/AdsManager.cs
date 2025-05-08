@@ -47,6 +47,7 @@ public class AdsManager : MonoBehaviour
     private LevelPlayInterstitialAd interstitialAd;
 
     private bool showImmediately = false;
+    private bool loadedBanner = false;
 
     private void Awake()
     {
@@ -190,8 +191,15 @@ public class AdsManager : MonoBehaviour
     public static void ShowBannerAd()
     {
         if (!instance || instance.bannerAd == null) return;
+
+        if (!instance.loadedBanner){
+            instance.bannerAd.LoadAd();
+        }
+        else{
+            instance.bannerAd.ShowAd();
+        }
+
         instance.bannerAd.ResumeAutoRefresh();
-        instance.bannerAd.ShowAd();
     }
  
     // Implement a method to call when the Hide Banner button is clicked:
@@ -278,7 +286,6 @@ public class AdsManager : MonoBehaviour
         bannerAd.OnAdLeftApplication += BannerOnAdLeftApplicationEvent;
         bannerAd.OnAdExpanded += BannerOnAdExpandedEvent;
 
-        bannerAd.LoadAd();
         bannerAd.PauseAutoRefresh();
     }
 #endregion
@@ -378,7 +385,10 @@ public class AdsManager : MonoBehaviour
 #endregion
 
 #region Banner Callbacks
-    void BannerOnAdLoadedEvent(LevelPlayAdInfo adInfo) {}
+    void BannerOnAdLoadedEvent(LevelPlayAdInfo adInfo) {
+        loadedBanner = true;
+        bannerAd.ShowAd();
+    }
     void BannerOnAdLoadFailedEvent(LevelPlayAdError ironSourceError) {}
     void BannerOnAdClickedEvent(LevelPlayAdInfo adInfo) {}
     void BannerOnAdDisplayedEvent(LevelPlayAdInfo adInfo) {}
