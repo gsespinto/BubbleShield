@@ -37,23 +37,15 @@ public class AuthenticationManager : MonoBehaviour
 
 #if UNITY_EDITOR
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            onAuthenticated?.Invoke();
 #elif UNITY_ANDROID
             LoginGooglePlayGames();
-
-            if (Token == ""){
-                await SignInWithGooglePlayGamesAsync(Token);
-            } else {
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            }
-
 #endif
 		}
 		catch (Exception e)
 		{
 			Logger.Exception(e);
 		}
-
-        onAuthenticated?.Invoke();
 	}
 
     // Setup authentication event handlers if desired
@@ -81,16 +73,18 @@ public class AuthenticationManager : MonoBehaviour
 
     public void LoginGooglePlayGames()
     {
-        PlayGamesPlatform.Instance.Authenticate((success) =>
+        PlayGamesPlatform.Instance.Authenticate(async (success) =>
         {
             if (success == SignInStatus.Success)
             {
                 Logger.Info("Login with Google Play games successful.");
 
-                PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
+                PlayGamesPlatform.Instance.RequestServerSideAccess(true, async code =>
                 {
                     Logger.Info("Authorization code: " + code);
                     Token = code;
+                    await SignInWithGooglePlayGamesAsync(Token);
+                    onAuthenticated?.Invoke();
                     // This token serves as an example to be used for SignInWithGooglePlayGames
                 });
             }
@@ -98,6 +92,8 @@ public class AuthenticationManager : MonoBehaviour
             {
                 Error = "Failed to retrieve Google play games authorization code";
                 Logger.Info("Login Unsuccessful");
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                onAuthenticated?.Invoke();
             }
         });
     }
