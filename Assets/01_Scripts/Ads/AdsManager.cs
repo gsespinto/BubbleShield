@@ -187,29 +187,19 @@ public class AdsManager : MonoBehaviour
         showingAd = false;
     }
 
-    void LoadBanner()
-    {
-        // Set up options to notify the SDK of load events:
-        /*BannerLoadOptions options = new BannerLoadOptions
-        {
-            loadCallback = OnBannerLoaded,
-            errorCallback = OnBannerError
-        };
- 
-        // Load the Ad Unit with banner content:
-        Advertisement.Banner.Load(_bannerId, options);*/
-    }
-
     public static void ShowBannerAd()
     {
         if (!instance || instance.bannerAd == null) return;
+        instance.bannerAd.ResumeAutoRefresh();
         instance.bannerAd.ShowAd();
     }
  
     // Implement a method to call when the Hide Banner button is clicked:
     public static void HideBannerAd()
     {
+        if (!instance || instance.bannerAd ==  null) return;
         instance.bannerAd.HideAd();
+        instance.bannerAd.PauseAutoRefresh();
     }
 
 #region  SDK Initialization
@@ -289,6 +279,7 @@ public class AdsManager : MonoBehaviour
         bannerAd.OnAdExpanded += BannerOnAdExpandedEvent;
 
         bannerAd.LoadAd();
+        bannerAd.PauseAutoRefresh();
     }
 #endregion
 

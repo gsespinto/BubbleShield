@@ -4,7 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    private int _sceneToLoad;
+    private int _sceneIndexToLoad = -1;
+    private string _sceneNameToLoad = "";
+    private Scene _sceneRefToLoad;
+
     [SerializeField] private Animator loadingAnimator;
     public static SceneLoader Instance;
 
@@ -30,7 +33,25 @@ public class SceneLoader : MonoBehaviour
     /// <summary> Queues scene to load and start loading screen </summary>
     public void LoadScene(int sceneIndex, Action onLoadedAction = null)
     {
-        _sceneToLoad = sceneIndex;
+        _sceneIndexToLoad = sceneIndex;
+        HandleLoad( onLoadedAction);
+    }
+
+    /// <summary> Queues scene to load and start loading screen </summary>
+    public void LoadScene(string sceneName, Action onLoadedAction = null)
+    {
+        _sceneNameToLoad = sceneName;
+        HandleLoad( onLoadedAction);
+    }
+
+    /// <summary> Queues scene to load and start loading screen </summary>
+    public void LoadScene(Scene sceneToLoad, Action onLoadedAction = null)
+    {
+        _sceneRefToLoad = sceneToLoad;
+        HandleLoad( onLoadedAction);
+    }
+
+    void HandleLoad(Action onLoadedAction = null){
         loadingAnimator.SetTrigger("LoadScene");
         nextAction = onLoadedAction;
     }
@@ -38,12 +59,29 @@ public class SceneLoader : MonoBehaviour
     /// <summary> Starts loading scene to load asynchronously </summary>
     public void StartLoadingScene()
     {
-        SceneManager.LoadSceneAsync(_sceneToLoad);
+        if(_sceneIndexToLoad >= 0)
+        {
+            SceneManager.LoadSceneAsync(_sceneIndexToLoad);
+        } 
+        else if (_sceneNameToLoad != "")
+        {
+            SceneManager.LoadSceneAsync(_sceneNameToLoad);
+        }
+        else if (_sceneRefToLoad != null)
+        {
+            SceneManager.LoadSceneAsync(_sceneRefToLoad.name);
+        }
+        else
+        {
+            Logger.Error("No scene index or name was given to load!", this);
+        }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         loadingAnimator.SetTrigger("Unload");
+        _sceneIndexToLoad = -1;
+        _sceneNameToLoad = "";
 
         if (nextAction != null)
         {

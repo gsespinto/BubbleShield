@@ -1466,13 +1466,13 @@ MonoBehaviour:
       - m_Target: {fileID: 148448635786277482, guid: 1f4fddb944fe4ef4799b12a0467c9496, type: 3}
         m_TargetAssemblyTypeName: LoadingManager, Assembly-CSharp
         m_MethodName: LoadScene
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: SplashScreen
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1960564697
